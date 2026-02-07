@@ -7,33 +7,37 @@ export default function Header({ onSearch }) {
         padding: "10px 20px",
         borderBottom: "1px solid #ddd",
         gap: "15px",
+        position: "sticky",
+        top: 0,
+        background: "white",
+        zIndex: 10,
       }}
     >
-      {/* Hamburger Menu */}
-      <button style={{ fontSize: "18px" }}>☰</button>
+      <button style={{ fontSize: "20px", background: "none", border: "none" }}>
+        ☰
+      </button>
 
-      {/* Logo */}
-      <h2 style={{ margin: 0 }}>YouTube</h2>
+      <h2 style={{ margin: 0, color: "red" }}>YouTube</h2>
 
-      {/* Search Bar */}
       <input
-        type="text"
         placeholder="Search"
         onChange={(e) => onSearch(e.target.value)}
         style={{
           flex: 1,
-          padding: "8px",
+          padding: "8px 12px",
           fontSize: "16px",
+          borderRadius: "20px",
+          border: "1px solid #ccc",
         }}
       />
 
-      {/* Sign In Button */}
       <button
         style={{
-          padding: "8px 12px",
+          padding: "8px 14px",
           background: "red",
           color: "white",
           border: "none",
+          borderRadius: "20px",
           cursor: "pointer",
         }}
       >
