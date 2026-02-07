@@ -1,50 +1,53 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/auth.css";
+import { loginUser } from "../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      alert("All fields required");
-      return;
-    }
+  const [form, setForm] = useState({});
 
-    // Temporary login (backend later)
-    localStorage.setItem("user", JSON.stringify({ name: "John Doe" }));
+  const handleLogin = async () => {
+     const res = await loginUser(form);
+    localStorage.setItem("token", res.data.token);
     navigate("/");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded w-80">
-        <h2 className="text-xl font-bold mb-4">Sign In</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Login</h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-2 border mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          className="auth-input"
+         onChange={e => setForm({ ...form, email: e.target.value })}
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-2 border mb-3"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          className="auth-input"
+           onChange={e => setForm({ ...form, password: e.target.value })}
         />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-red-600 text-white p-2 rounded"
-        >
+        <button className="auth-btn" onClick={handleLogin}>
           Login
         </button>
+
+        <p className="auth-footer">
+          New user?
+          <span
+            className="auth-link"
+            onClick={() => navigate("/signup")}
+          >
+            Sign Up
+          </span>
+        </p>
       </div>
     </div>
   );
