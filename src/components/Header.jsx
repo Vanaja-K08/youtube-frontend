@@ -1,4 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Header({ onSearch }) {
+
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <div
       style={{
@@ -31,7 +36,11 @@ export default function Header({ onSearch }) {
         }}
       />
 
-      <button
+      {user ? (
+        <span className="font-semibold">{user.name}</span>
+      ) : (
+        <button
+          onClick={() => navigate("/login")}
         style={{
           padding: "8px 14px",
           background: "red",
@@ -43,6 +52,7 @@ export default function Header({ onSearch }) {
       >
         Sign In
       </button>
+      )}
     </div>
   );
 }
