@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../services/api";
+import Comments from "../components/Comments";
 
 const VideoPlayer = () => {
   const { id } = useParams();
@@ -51,22 +52,9 @@ const VideoPlayer = () => {
       </div>
 
       <div className="comments">
-        <h3>Comments</h3>
+      <Comments videoId={video._id} />
 
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Add a comment"
-        />
-        <button onClick={addComment}>Post</button>
-
-        {comments.map(c => (
-          <div key={c._id} className="comment">
-            <b>{c.user?.username}</b>
-            <p>{c.text}</p>
-            <button onClick={() => deleteComment(c._id)}>Delete</button>
-          </div>
-        ))}
+        
       </div>
     </div>
   );
