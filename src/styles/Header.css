@@ -1,0 +1,66 @@
+.header {
+  height: 60px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-icon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+}
+
+.search-box {
+  width: 40%;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.signin-btn {
+  padding: 6px 14px;
+  border: 1px solid #065fd4;
+  color: #065fd4;
+  background: white;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.logout-btn {
+  border: none;
+  background: transparent;
+  color: red;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .search-box {
+    display: none;
+  }
+}

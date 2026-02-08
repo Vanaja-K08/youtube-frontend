@@ -1,18 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import VideoPlayer from "./pages/VideoPlayer";
-import Channel from "./pages/Channel";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Header from "./components/Header";
 
-export default function App() {
+function App() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
+    <div>
+     
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/video/:id" element={<VideoPlayer />} />
-        <Route path="/channel" element={<Channel />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
+    </div>
   );
 }
+
+export default App;

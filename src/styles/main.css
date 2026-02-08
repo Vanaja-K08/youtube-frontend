@@ -1,0 +1,19 @@
+.channel {
+  padding: 20px;
+}
+
+.channel-video {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 5px 0;
+  background: #f4f4f4;
+  border-radius: 5px;
+}
+
+.channel-video button {
+  background: crimson;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+}

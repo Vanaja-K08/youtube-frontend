@@ -1,0 +1,33 @@
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.video-card {
+  cursor: pointer;
+}
+
+.thumbnail {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.video-info {
+  padding: 8px 0;
+}
+
+.video-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.channel-name {
+  font-size: 12px;
+  color: gray;
+}
+
+.views {
+  font-size: 12px;
+  color: gray;
+}
