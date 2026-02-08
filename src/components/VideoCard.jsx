@@ -13,7 +13,7 @@ export default function VideoCard({ video }) {
         src={video.thumbnailUrl}
         alt={video.title}
         className="thumbnail"
-         onClick={() => navigate(`/video/${video.videoId}`)}
+         onClick={() => navigate(`/video/${video._id}`)}
       />
 
       <div className="video-info">

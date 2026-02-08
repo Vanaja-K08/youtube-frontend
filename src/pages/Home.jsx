@@ -1,11 +1,20 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import "../styles/video.css";
+import VideoCard from "../components/VideoCard";
+// import videos from "../data/videos";
+import API from "../services/api";
 
 export default function Home() {
   const [open, setOpen] = useState(false);
+
+  const [videos, setVideos] = useState([]);
+
+   useEffect(() => {
+    API.get("/videos").then(res => setVideos(res.data));
+  }, []);
 
   return (
     <>
@@ -19,9 +28,9 @@ export default function Home() {
           padding: "16px"
         }}
       >
-        {/* {videos.map((video) => (
+        {videos.map((video) => (
           <VideoCard key={video.videoId} video={video} />
-        ))} */}
+        ))}
       </div>
     </>
   );
