@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import "../styles/video.css";
 import VideoCard from "../components/VideoCard";
-// import videos from "../data/videos";
+import Filters from "../components/Filters";
 import API from "../services/api";
 
 export default function Home() {
@@ -12,13 +12,26 @@ export default function Home() {
 
   const [videos, setVideos] = useState([]);
 
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("All");
+
    useEffect(() => {
     API.get("/videos").then(res => setVideos(res.data));
   }, []);
 
+  useEffect(() => {
+    fetch(
+      `http://localhost:5000/api/videos?search=${search}&category=${category}`
+    )
+      .then((res) => res.json())
+      .then((data) => setVideos(data));
+  }, [search, category]);
+
   return (
     <>
-      <Header toggleSidebar={() => setOpen(!open)} />
+      <Header toggleSidebar={() => setOpen(!open)} 
+        setSearch={setSearch}/>
+         <Filters setCategory={setCategory} />
       <Sidebar isOpen={open} />
 
       <div

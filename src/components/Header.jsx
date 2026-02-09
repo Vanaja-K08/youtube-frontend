@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
 import { useEffect, useState } from "react";
 
-export default function Header({ toggleSidebar }) {
+export default function Header({ toggleSidebar,setSearch  }) {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
@@ -32,7 +32,12 @@ export default function Header({ toggleSidebar }) {
         <span className="logo">YouTube</span>
       </div>
 
-      <input className="search-box" placeholder="Search" />
+      <input
+        type="text"
+        placeholder="Search"
+        className="search-box"
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       <div className="header-right">
         {/* {!user ? (

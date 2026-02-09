@@ -9,32 +9,42 @@ const VideoPlayer = () => {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     API.get(`/videos/${id}`).then(res => setVideo(res.data));
     API.get(`/comments/${id}`).then(res => setComments(res.data));
   }, [id]);
 
-  const addComment = async () => {
-    await API.post("/comments", { text, videoId: id });
-    setText("");
-    const res = await API.get(`/comments/${id}`);
-    setComments(res.data);
-  };
 
-  const deleteComment = async (cid) => {
-    await API.delete(`/comments/${cid}`);
-    setComments(comments.filter(c => c._id !== cid));
-  };
 
-  const like = async () => {
-    const res = await API.post(`/videos/${id}/like`);
-    setVideo(res.data);
-  };
+  const handleLike = async () => {
+  const res = await fetch(
+    `http://localhost:5000/api/videos/like/${video._id}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  const data = await res.json();
+  setVideo(data);
+};
 
-  const dislike = async () => {
-    const res = await API.post(`/videos/${id}/dislike`);
-    setVideo(res.data);
-  };
+const handleDislike = async () => {
+  const res = await fetch(
+    `http://localhost:5000/api/videos/dislike/${video._id}`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+  const data = await res.json();
+  setVideo(data);
+};
 
   if (!video) return <p>Loading...</p>;
 
@@ -46,10 +56,15 @@ const VideoPlayer = () => {
       <p>{video.description}</p>
       <p><b>{video.channel?.name}</b></p>
 
-      <div className="actions">
-        <button onClick={like}>👍 {video.likes}</button>
-        <button onClick={dislike}>👎 {video.dislikes}</button>
-      </div>
+      <div style={{ display: "flex", gap: "20px", margin: "10px 0" }}>
+  <button onClick={handleLike}>
+    👍 {video.likes.length}
+  </button>
+
+  <button onClick={handleDislike}>
+    👎 {video.dislikes.length}
+  </button>
+</div>
 
       <div className="comments">
       <Comments videoId={video._id} />
