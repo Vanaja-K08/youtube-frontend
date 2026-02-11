@@ -7,12 +7,23 @@ export default function Header({ toggleSidebar,setSearch  }) {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
+
+    const token = localStorage.getItem("token");
+
    useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
+
+   const handleChannelClick = () => {
+    if (!token) {
+      navigate("/login");
+    } else {
+      navigate("/channel");
+    }
+  };
 
   const logout = () => {
     localStorage.clear();
@@ -52,6 +63,10 @@ export default function Header({ toggleSidebar,setSearch  }) {
         ) : (
           <span className="user-name">{user.username.charAt(0).toUpperCase()}</span>
         )} */}
+
+        <button onClick={handleChannelClick} className="channelBtn">
+          Channel
+        </button>
 
          {!user ? (
           <button className="login-btn" onClick={() => navigate("/login")}>

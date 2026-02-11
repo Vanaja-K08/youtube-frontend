@@ -1,117 +1,117 @@
-// import { useState } from "react";
-// import Header from "../components/Header";
 
-// export default function Channel() {
-//   // 🔹 Videos state
-//   const [videos, setVideos] = useState([
-//     { id: 1, title: "React Basics" },
-//     { id: 2, title: "Node.js Tutorial" },
-//   ]);
+// import CreateVideoForm from "../components/CreateVideoForm";
+// import VideoList from "../components/VideoList";
 
-//   // 🔹 Input state
-//   const [newTitle, setNewTitle] = useState("");
-
-//   // 🔹 Edit state
-//   const [editId, setEditId] = useState(null);
-
+// const Channel = () => {
 //   return (
-//     <>
-//       <Header />
-
-//       <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
-//         <h2>My Channel</h2>
-
-//         {/* ➕ ADD VIDEO */}
-//         <input
-//           placeholder="Video title"
-//           value={newTitle}
-//           onChange={(e) => setNewTitle(e.target.value)}
-//           style={{ padding: "8px", width: "100%", marginBottom: "10px" }}
-//         />
-
-//         <button
-//           onClick={() => {
-//             if (!newTitle) return;
-//             setVideos([...videos, { id: Date.now(), title: newTitle }]);
-//             setNewTitle("");
-//           }}
-//         >
-//           Add Video
-//         </button>
-
-//         {/* 📺 VIDEO LIST */}
-//         {videos.map((video) => (
-//           <div
-//             key={video.id}
-//             style={{
-//               padding: "10px",
-//               border: "1px solid #ddd",
-//               marginTop: "15px",
-//             }}
-//           >
-//             {/* ✏️ EDIT OR VIEW */}
-//             {editId === video.id ? (
-//               <input
-//                 value={newTitle}
-//                 onChange={(e) => setNewTitle(e.target.value)}
-//               />
-//             ) : (
-//               <p>{video.title}</p>
-//             )}
-
-//             {/* 🛠 ACTION BUTTONS */}
-//             <button
-//               onClick={() => {
-//                 setEditId(video.id);
-//                 setNewTitle(video.title);
-//               }}
-//             >
-//               Edit
-//             </button>
-
-//             <button
-//               onClick={() => {
-//                 setVideos(videos.filter((v) => v.id !== video.id));
-//               }}
-//             >
-//               Delete
-//             </button>
-
-//             {editId === video.id && (
-//               <button
-//                 onClick={() => {
-//                   setVideos(
-//                     videos.map((v) =>
-//                       v.id === editId ? { ...v, title: newTitle } : v
-//                     )
-//                   );
-//                   setEditId(null);
-//                   setNewTitle("");
-//                 }}
-//               >
-//                 Save
-//               </button>
-//             )}
-//           </div>
-//         ))}
-//       </div>
-//     </>
+//     <div>
+//       <h2>My Channel</h2>
+//       <CreateVideoForm />
+//       <VideoList />
+//     </div>
 //   );
-// }
+// };
 
+// export default Channel;
 
-import CreateVideoForm from "../components/CreateVideoForm";
-import VideoList from "../components/VideoList";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import "../styles/Channel.css";
 
 const Channel = () => {
+  const [videos, setVideos] = useState([]);
+  const [form, setForm] = useState({
+    title: "",
+    videoUrl: "",
+    thumbnailUrl: "",
+    category: ""
+  });
+
+  const token = localStorage.getItem("token");
+
+  const fetchVideos = async () => {
+    const res = await axios.get("http://localhost:5000/api/videos/my", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setVideos(res.data);
+  };
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    await axios.post(
+      "http://localhost:5000/api/videos",
+      form,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    fetchVideos();
+
+    setForm({
+      title: "",
+      videoUrl: "",
+      thumbnailUrl: "",
+      category: ""
+    });
+  };
+
+  const deleteVideo = async id => {
+    await axios.delete(
+      `http://localhost:5000/api/videos/${id}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    fetchVideos();
+  };
+
   return (
-    <div>
-      <h2>My Channel</h2>
-      <CreateVideoForm />
-      <VideoList />
+    <div className="channel">
+      <h1>Your Channel</h1>
+
+      {/* FORM */}
+      <form onSubmit={handleSubmit} className="form">
+        <input
+          placeholder="Title"
+          value={form.title}
+          onChange={e => setForm({ ...form, title: e.target.value })}
+        />
+        <input
+          placeholder="Video URL"
+          value={form.videoUrl}
+          onChange={e => setForm({ ...form, videoUrl: e.target.value })}
+        />
+        <input
+          placeholder="Thumbnail URL"
+          value={form.thumbnailUrl}
+          onChange={e => setForm({ ...form, thumbnailUrl: e.target.value })}
+        />
+        <input
+          placeholder="Category"
+          value={form.category}
+          onChange={e => setForm({ ...form, category: e.target.value })}
+        />
+        <button>Add Video</button>
+      </form>
+
+      {/* VIDEO LIST */}
+      <div className="grid">
+        {videos.map(v => (
+          <div className="card" key={v._id}>
+            <img src={v.thumbnailUrl} alt="" />
+            <h3>{v.title}</h3>
+            <button onClick={() => deleteVideo(v._id)}>Delete</button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
 export default Channel;
+
+
 
