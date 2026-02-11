@@ -28,6 +28,7 @@ const CreateVideoForm = () => {
     if (res.ok) {
       alert("Video uploaded");
       setForm({ title: "", videoUrl: "", thumbnailUrl: "", category: "" });
+      navigate("/"); // ✅ redirect to home
     } else {
       alert("Upload failed");
     }

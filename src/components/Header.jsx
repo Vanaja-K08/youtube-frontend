@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/header.css";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Header({ toggleSidebar,setSearch  }) {
   const navigate = useNavigate();
@@ -17,13 +18,30 @@ export default function Header({ toggleSidebar,setSearch  }) {
     }
   }, []);
 
-   const handleChannelClick = () => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      navigate("/channel");
-    }
-  };
+   const handleChannelClick = async () => {
+    // if (!token) {
+    //   navigate("/login");
+    // } else {
+    //   navigate("/channel");
+    // }
+
+
+    if (!token) return navigate("/login");
+
+  try {
+   const users = await axios.get("http://localhost:5000/api/channel/me", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    console.log(users)
+
+    // channel exists
+    navigate("/channel");
+  } catch {
+    // no channel
+    navigate("/create-channel");
+  }
+};
 
   const logout = () => {
     localStorage.clear();
@@ -63,6 +81,10 @@ export default function Header({ toggleSidebar,setSearch  }) {
         ) : (
           <span className="user-name">{user.username.charAt(0).toUpperCase()}</span>
         )} */}
+
+{/* <button onClick={() => navigate("/create-channel")}>
+  Create Channel
+</button> */}
 
         <button onClick={handleChannelClick} className="channelBtn">
           Channel

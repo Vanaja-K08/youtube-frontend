@@ -4,6 +4,8 @@ import VideoPlayer from "./pages/VideoPlayer";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Channel from "./pages/Channel";
+import CreateChannel from "./components/CreateChannel";
+import CreateVideoForm from "./components/CreateVideoForm";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -16,7 +18,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
          <Route path="/video/:id" element={<VideoPlayer />} />
-         <Route path="/channel" element={<Channel />} />
+         <Route path="/channel" element={<CreateVideoForm />} />
+        <Route path="/create-channel" element={<CreateChannel />} />
       </Routes>
     </div>
   );

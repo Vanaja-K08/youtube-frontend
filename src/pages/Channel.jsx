@@ -38,7 +38,18 @@ const Channel = () => {
 
   useEffect(() => {
     fetchVideos();
+    checkChannel();
   }, []);
+
+   const checkChannel = async () => {
+    try {
+      await axios.get("http://localhost:5000/api/channel/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    } catch {
+      navigate("/create-channel");
+    }
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
