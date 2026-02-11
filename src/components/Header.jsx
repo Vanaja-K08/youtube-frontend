@@ -39,6 +39,8 @@ export default function Header({ toggleSidebar,setSearch  }) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
+
+
       <div className="header-right">
         {/* {!user ? (
           <button

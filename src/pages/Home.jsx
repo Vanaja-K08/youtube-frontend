@@ -4,7 +4,6 @@ import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import "../styles/video.css";
 import VideoCard from "../components/VideoCard";
-import Filters from "../components/Filters";
 import API from "../services/api";
 
 export default function Home() {
@@ -15,7 +14,9 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
 
-   useEffect(() => {
+  const categories = ["All", "React", "Node", "JavaScript"];
+
+  useEffect(() => {
     API.get("/videos").then(res => setVideos(res.data));
   }, []);
 
@@ -23,16 +24,25 @@ export default function Home() {
     fetch(
       `http://localhost:5000/api/videos?search=${search}&category=${category}`
     )
-      .then((res) => res.json())
-      .then((data) => setVideos(data));
+      .then(res => res.json())
+      .then(data => setVideos(data));
   }, [search, category]);
 
   return (
     <>
-      <Header toggleSidebar={() => setOpen(!open)} 
-        setSearch={setSearch}/>
-         <Filters setCategory={setCategory} />
+      <Header toggleSidebar={() => setOpen(!open)}
+        setSearch={setSearch} />
+
+
       <Sidebar isOpen={open} />
+
+      <div style={{ display: "flex", gap: "10px", margin: "10px 0" }}>
+        {categories.map((cat) => (
+          <button key={cat} onClick={() => setCategory(cat)}>
+            {cat}
+          </button>
+        ))}
+      </div>
 
       <div
         className="video-grid"
