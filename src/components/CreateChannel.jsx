@@ -20,6 +20,7 @@ const navigate = useNavigate();
 
       );
       alert(res.data.message);
+      localStorage.setItem("channelId", res.data.channel._id);
        navigate("/"); // ✅ go to home
     } catch (err) {
       alert(err.response?.data?.message || "Error creating channel");

@@ -49,6 +49,18 @@ export default function Header({ toggleSidebar,setSearch  }) {
     // navigate("/login");
   };
 
+   const viewChannel = () => {
+    const channelId = localStorage.getItem("channelId");
+
+  if (!channelId) {
+    alert("Create channel first");
+    navigate("/create-channel");
+    return;
+  }
+
+  navigate(`/channel/${channelId}`);
+  };
+
   return (
     <div className="header">
       <div className="header-left">
@@ -104,7 +116,8 @@ export default function Header({ toggleSidebar,setSearch  }) {
             <div className="user-hover">
               <p className="name">{user.username}</p>
               <p className="email">{user.email}</p>
-              <button onClick={logout}>Logout</button>
+              <button onClick={logout} >Logout</button>
+              <button onClick={viewChannel}>View Channel</button>
             </div>
           </div>
         )}

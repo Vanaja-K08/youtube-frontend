@@ -1,128 +1,49 @@
-
-// import CreateVideoForm from "../components/CreateVideoForm";
-// import VideoList from "../components/VideoList";
-
-// const Channel = () => {
-//   return (
-//     <div>
-//       <h2>My Channel</h2>
-//       <CreateVideoForm />
-//       <VideoList />
-//     </div>
-//   );
-// };
-
-// export default Channel;
-
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/Channel.css";
 
-const Channel = () => {
+export default function ViewChannel() {
+  const { id } = useParams();
+  const [channel, setChannel] = useState(null);
   const [videos, setVideos] = useState([]);
-  const [form, setForm] = useState({
-    title: "",
-    videoUrl: "",
-    thumbnailUrl: "",
-    category: ""
-  });
+  const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-
-  const fetchVideos = async () => {
-    const res = await axios.get("http://localhost:5000/api/videos/my", {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setVideos(res.data);
-  };
+   const channelId = localStorage.getItem("channelId");
 
   useEffect(() => {
-    fetchVideos();
-    checkChannel();
-  }, []);
-
-   const checkChannel = async () => {
-    try {
-      await axios.get("http://localhost:5000/api/channel/me", {
-        headers: { Authorization: `Bearer ${token}` }
+    fetch(`http://localhost:5000/api/channel/${channelId}`)
+      .then(res => res.json())
+      .then(data => {
+        setChannel(data.channel);
+        setVideos(data.videos);
       });
-    } catch {
-      navigate("/create-channel");
-    }
-  };
+  }, [channelId]);
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    await axios.post(
-      "http://localhost:5000/api/videos",
-      form,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    fetchVideos();
-
-    setForm({
-      title: "",
-      videoUrl: "",
-      thumbnailUrl: "",
-      category: ""
-    });
-  };
-
-  const deleteVideo = async id => {
-    await axios.delete(
-      `http://localhost:5000/api/videos/${id}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    fetchVideos();
-  };
+  if (!channel) return <h2>Loading...</h2>;
 
   return (
-    <div className="channel">
-      <h1>Your Channel</h1>
+    <div className="view-channel">
 
-      {/* FORM */}
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          placeholder="Title"
-          value={form.title}
-          onChange={e => setForm({ ...form, title: e.target.value })}
-        />
-        <input
-          placeholder="Video URL"
-          value={form.videoUrl}
-          onChange={e => setForm({ ...form, videoUrl: e.target.value })}
-        />
-        <input
-          placeholder="Thumbnail URL"
-          value={form.thumbnailUrl}
-          onChange={e => setForm({ ...form, thumbnailUrl: e.target.value })}
-        />
-        <input
-          placeholder="Category"
-          value={form.category}
-          onChange={e => setForm({ ...form, category: e.target.value })}
-        />
-        <button>Add Video</button>
-      </form>
+      {/* HEADER */}
+      <div className="channel-banner">
+        <h1>{channel.name}</h1>
+        <p>{channel.description}</p>
+      </div>
 
-      {/* VIDEO LIST */}
-      <div className="grid">
+      {/* VIDEOS */}
+      <div className="video-grid">
         {videos.map(v => (
-          <div className="card" key={v._id}>
+          <div
+            key={v._id}
+            className="video-card"
+            onClick={() => navigate(`/video/${v._id}`)}
+          >
             <img src={v.thumbnailUrl} alt="" />
-            <h3>{v.title}</h3>
-            <button onClick={() => deleteVideo(v._id)}>Delete</button>
+            <h4>{v.title}</h4>
           </div>
         ))}
       </div>
+
     </div>
   );
-};
-
-export default Channel;
-
-
-
+}

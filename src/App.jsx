@@ -20,6 +20,7 @@ function App() {
          <Route path="/video/:id" element={<VideoPlayer />} />
          <Route path="/channel" element={<CreateVideoForm />} />
         <Route path="/create-channel" element={<CreateChannel />} />
+       <Route path="/channel/:id" element={<Channel />} />
       </Routes>
     </div>
   );
