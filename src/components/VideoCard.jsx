@@ -6,6 +6,9 @@ export default function VideoCard({ video }) {
 
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+// if (!token) return <p>Please login first</p>;
+
   return (
     <div className="video-card">
      
